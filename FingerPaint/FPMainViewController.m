@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 asu. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "FPMainViewController.h"
 
-@interface ViewController ()
+@interface FPMainViewController ()
 
 @end
 
-@implementation ViewController
+@implementation FPMainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

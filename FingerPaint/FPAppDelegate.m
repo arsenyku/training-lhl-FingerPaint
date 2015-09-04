@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 asu. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "FPAppDelegate.h"
 
-@interface AppDelegate ()
+@interface FPAppDelegate ()
 
 @end
 
-@implementation AppDelegate
+@implementation FPAppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
