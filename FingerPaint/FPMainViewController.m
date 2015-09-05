@@ -11,11 +11,14 @@
 #import "FPCanvasView.h"
 #import "FPColourSelect.h"
 
+
+
+
 @interface FPMainViewController () <FPCanvasDataSource, FPColourChangeDelegate>
 
 @property (strong, nonatomic) NSMutableArray *drawingsArray;
 @property (strong, nonatomic) FPDrawing *currentDrawing;
-@property (assign, nonatomic) BOOL useLineSmoothing;
+@property (assign, nonatomic) SmoothingMode lineSmoothing;
 @property (assign, nonatomic) BOOL isDrawing;
 
 @property (strong, nonatomic) IBOutlet FPCanvasView *canvas;
@@ -37,7 +40,7 @@
     if (self) {
         _drawingsArray = [NSMutableArray new];
         _currentDrawing = nil;
-        _useLineSmoothing = NO;
+        _lineSmoothing = NO;
         _isDrawing = NO;
     }
     return self;
@@ -61,6 +64,7 @@
     self.color4.delegate = self;
 
     [self startNewDrawingWithColour:self.color1.backgroundColor];
+    [self refresh];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,7 +127,21 @@
 }
 
 - (IBAction)smoothLinesToggle:(id)sender {
-    self.useLineSmoothing = ! self.useLineSmoothing;
+    switch (self.lineSmoothing) {
+        case Off:
+            self.lineSmoothing = Overlay;
+            break;
+
+        case Overlay:
+            self.lineSmoothing = SmoothOnly;
+            break;
+            
+        case SmoothOnly:
+        default:
+            self.lineSmoothing = Off;
+            break;
+    }
+    
     [self refresh];
 }
 
@@ -148,8 +166,8 @@
     return result;
 }
 
--(BOOL)useSmoothing{
-    return self.useLineSmoothing;
+-(SmoothingMode)smoothingMode{
+    return self.lineSmoothing;
 }
 #pragma mark - <FPColorChangeDelegate>
 
@@ -166,6 +184,23 @@
     view.userInteractionEnabled = !self.isDrawing;
 }
 
+-(void)adjustSmoothingText{
+    switch(self.lineSmoothing){
+        case Off:
+            [self.smoothButton setTitle:@"No Smoothing" forState:UIControlStateNormal];
+            break;
+            
+        case Overlay:
+            [self.smoothButton setTitle:@"Overlay" forState:UIControlStateNormal];
+            break;
+            
+        case SmoothOnly:
+        default:
+            [self.smoothButton setTitle:@"Smooth Lines" forState:UIControlStateNormal];
+            break;
+    }
+}
+
 -(void)refresh{
     [self toggleControl:self.color1];
     [self toggleControl:self.color2];
@@ -173,6 +208,8 @@
     [self toggleControl:self.color4];
     [self toggleControl:self.clearButton];
     [self toggleControl:self.undoButton];
+    [self toggleControl:self.smoothButton];
+    [self adjustSmoothingText];
     
     [self.view setNeedsDisplay];
 }

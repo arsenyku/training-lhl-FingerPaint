@@ -8,9 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+
+typedef NS_ENUM(NSInteger, SmoothingMode) {
+    Off,
+    Overlay,
+    SmoothOnly
+};
+
 @protocol FPCanvasDataSource <NSObject>
 -(NSArray*)drawings;
--(BOOL)useSmoothing;
+-(SmoothingMode)smoothingMode;
 @end
 
 @interface FPCanvasView : UIView

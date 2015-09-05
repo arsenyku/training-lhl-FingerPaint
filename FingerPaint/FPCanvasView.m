@@ -9,6 +9,7 @@
 #import "FPCanvasView.h"
 #import "UIBezierPath+Interpolation.h"
 
+
 @implementation FPCanvasView
 
 // Only override drawRect: if you perform custom drawing.
@@ -20,12 +21,14 @@
     
     NSArray *drawings = [self.delegate drawings];
 
-    BOOL useSmoothing = self.delegate.useSmoothing;
+    SmoothingMode smoothingMode = self.delegate.smoothingMode;
 
     for (NSDictionary *drawingData in drawings) {
         UIBezierPath *path = [UIBezierPath new];
 
         UIColor *brushColour = drawingData[ @"colour" ];
+        //UIColor *overlayColour = [UIColor colorWithRed:255.0/255.0 green:72.0/255.0 blue:245.0/255.0 alpha:1.0];
+        UIColor *overlayColour = [self invertColour:brushColour];
 
         NSArray *drawingPoints = drawingData[ @"points" ];
         
@@ -48,18 +51,35 @@
         
         UIBezierPath *interpolated = [UIBezierPath interpolateCGPointsWithHermite:drawingPoints closed:NO];
 
-        if (useSmoothing){
-            [[UIColor orangeColor] setStroke];
-            [interpolated stroke];
+        switch (smoothingMode) {
+            case Off:
+                [brushColour setStroke];
+                [path stroke];
+                break;
+                
+            case Overlay:
+                [overlayColour setStroke];
+                [interpolated stroke];
+                [brushColour setStroke];
+                [path stroke];
+                break;
+                
+            case SmoothOnly:
+            default:
+                [brushColour setStroke];
+                [interpolated stroke];
+                break;
         }
-        
-        [brushColour setStroke];
-        [path stroke];
         
     }
 }
 
-
-
+-(UIColor*)invertColour:(UIColor*)colour{
+    CGFloat hue, saturation, brightness, alpha;
+    [colour getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+    NSLog(@"%@", colour);
+    NSLog(@"%f, %f, %f, %f", hue, saturation, brightness, alpha);
+    return [UIColor colorWithHue:1.0-hue saturation:saturation brightness:brightness alpha:alpha];
+}
 
 @end
