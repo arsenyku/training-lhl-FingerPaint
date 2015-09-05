@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet FPColourSelect *color3;
 @property (weak, nonatomic) IBOutlet FPColourSelect *color4;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
+@property (weak, nonatomic) IBOutlet UIButton *undoButton;
+
 @end
 
 @implementation FPMainViewController
@@ -71,7 +73,6 @@
     
     CGPoint point = [[touches anyObject] locationInView:self.view];
     [self.currentDrawing addPoint:point];
-    [self.drawingsArray addObject:self.currentDrawing];
 
     [self refresh];
 
@@ -102,6 +103,17 @@
     [self.drawingsArray removeAllObjects];
 
     [self startNewDrawingWithColour:lastColour];
+    
+    [self refresh];
+}
+
+- (IBAction)undo:(id)sender {
+    if ([self.drawings count] < 2)
+        return;
+
+    int lastCompleteDrawingIndex = (int)[self.drawings count] - 2;
+    
+    [self.drawingsArray removeObjectAtIndex:lastCompleteDrawingIndex ];
     
     [self refresh];
 }
@@ -147,6 +159,7 @@
     [self toggleControl:self.color3];
     [self toggleControl:self.color4];
     [self toggleControl:self.clearButton];
+    [self toggleControl:self.undoButton];
     
     [self.view setNeedsDisplay];
 }

@@ -35,4 +35,8 @@
     [self.pointsList addObject:[NSValue valueWithCGPoint:point]];
 }
 
+-(void)removeLastPoint{
+    [self.pointsList removeLastObject];
+}
+
 @end

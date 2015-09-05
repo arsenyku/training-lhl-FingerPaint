@@ -15,4 +15,5 @@
 
 -(NSArray*)points;
 -(void)addPoint:(CGPoint)point;
+-(void)removeLastPoint;
 @end
