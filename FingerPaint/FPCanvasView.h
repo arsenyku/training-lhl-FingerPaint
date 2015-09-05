@@ -10,6 +10,7 @@
 
 @protocol FPCanvasDataSource <NSObject>
 -(NSArray*)drawings;
+-(BOOL)useSmoothing;
 @end
 
 @interface FPCanvasView : UIView

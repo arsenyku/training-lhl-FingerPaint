@@ -7,6 +7,7 @@
 //
 
 #import "FPCanvasView.h"
+#import "UIBezierPath+Interpolation.h"
 
 @implementation FPCanvasView
 
@@ -19,13 +20,13 @@
     
     NSArray *drawings = [self.delegate drawings];
 
+    BOOL useSmoothing = self.delegate.useSmoothing;
 
     for (NSDictionary *drawingData in drawings) {
         UIBezierPath *path = [UIBezierPath new];
 
         UIColor *brushColour = drawingData[ @"colour" ];
-        [brushColour setStroke];
-        
+
         NSArray *drawingPoints = drawingData[ @"points" ];
         
         if ([drawingPoints count] < 1)
@@ -45,6 +46,14 @@
             [path addLineToPoint:point];
         }
         
+        UIBezierPath *interpolated = [UIBezierPath interpolateCGPointsWithHermite:drawingPoints closed:NO];
+
+        if (useSmoothing){
+            [[UIColor orangeColor] setStroke];
+            [interpolated stroke];
+        }
+        
+        [brushColour setStroke];
         [path stroke];
         
     }

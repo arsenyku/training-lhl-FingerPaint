@@ -10,6 +10,8 @@
 		123B61C91B9A45E800A34F90 /* FPDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 123B61C81B9A45E800A34F90 /* FPDrawing.m */; };
 		123B61CF1B9A4BB400A34F90 /* FPCanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 123B61CE1B9A4BB400A34F90 /* FPCanvasView.m */; };
 		123B61D21B9A69C800A34F90 /* FPColourSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 123B61D11B9A69C800A34F90 /* FPColourSelect.m */; };
+		123B61D51B9A9AD100A34F90 /* UIBezierPath+Interpolation.m in Sources */ = {isa = PBXBuildFile; fileRef = 123B61D41B9A9AD100A34F90 /* UIBezierPath+Interpolation.m */; };
+		123B61D81B9A9B8400A34F90 /* CGPointExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 123B61D71B9A9B8400A34F90 /* CGPointExtension.m */; };
 		1253009E1B9A389F001A7C6A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1253009D1B9A389F001A7C6A /* main.m */; };
 		125300A11B9A389F001A7C6A /* FPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 125300A01B9A389F001A7C6A /* FPAppDelegate.m */; };
 		125300A41B9A389F001A7C6A /* FPMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 125300A31B9A389F001A7C6A /* FPMainViewController.m */; };
@@ -36,6 +38,10 @@
 		123B61CE1B9A4BB400A34F90 /* FPCanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPCanvasView.m; sourceTree = "<group>"; };
 		123B61D01B9A69C800A34F90 /* FPColourSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPColourSelect.h; sourceTree = "<group>"; };
 		123B61D11B9A69C800A34F90 /* FPColourSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPColourSelect.m; sourceTree = "<group>"; };
+		123B61D31B9A9AD100A34F90 /* UIBezierPath+Interpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Interpolation.h"; sourceTree = "<group>"; };
+		123B61D41B9A9AD100A34F90 /* UIBezierPath+Interpolation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Interpolation.m"; sourceTree = "<group>"; };
+		123B61D61B9A9B8400A34F90 /* CGPointExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGPointExtension.h; sourceTree = "<group>"; };
+		123B61D71B9A9B8400A34F90 /* CGPointExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGPointExtension.m; sourceTree = "<group>"; };
 		125300981B9A389F001A7C6A /* FingerPaint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FingerPaint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1253009C1B9A389F001A7C6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1253009D1B9A389F001A7C6A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -100,6 +106,10 @@
 				125300A31B9A389F001A7C6A /* FPMainViewController.m */,
 				123B61C71B9A45E800A34F90 /* FPDrawing.h */,
 				123B61C81B9A45E800A34F90 /* FPDrawing.m */,
+				123B61D61B9A9B8400A34F90 /* CGPointExtension.h */,
+				123B61D71B9A9B8400A34F90 /* CGPointExtension.m */,
+				123B61D31B9A9AD100A34F90 /* UIBezierPath+Interpolation.h */,
+				123B61D41B9A9AD100A34F90 /* UIBezierPath+Interpolation.m */,
 				125300A51B9A389F001A7C6A /* Main.storyboard */,
 				125300A81B9A389F001A7C6A /* Images.xcassets */,
 				125300AA1B9A389F001A7C6A /* LaunchScreen.xib */,
@@ -237,8 +247,10 @@
 				123B61C91B9A45E800A34F90 /* FPDrawing.m in Sources */,
 				125300A41B9A389F001A7C6A /* FPMainViewController.m in Sources */,
 				123B61CF1B9A4BB400A34F90 /* FPCanvasView.m in Sources */,
+				123B61D51B9A9AD100A34F90 /* UIBezierPath+Interpolation.m in Sources */,
 				123B61D21B9A69C800A34F90 /* FPColourSelect.m in Sources */,
 				125300A11B9A389F001A7C6A /* FPAppDelegate.m in Sources */,
+				123B61D81B9A9B8400A34F90 /* CGPointExtension.m in Sources */,
 				1253009E1B9A389F001A7C6A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

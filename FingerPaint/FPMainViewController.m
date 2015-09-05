@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) NSMutableArray *drawingsArray;
 @property (strong, nonatomic) FPDrawing *currentDrawing;
+@property (assign, nonatomic) BOOL useLineSmoothing;
 @property (assign, nonatomic) BOOL isDrawing;
 
 @property (strong, nonatomic) IBOutlet FPCanvasView *canvas;
@@ -24,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet FPColourSelect *color4;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UIButton *undoButton;
+@property (weak, nonatomic) IBOutlet UIButton *smoothButton;
 
 @end
 
@@ -35,6 +37,8 @@
     if (self) {
         _drawingsArray = [NSMutableArray new];
         _currentDrawing = nil;
+        _useLineSmoothing = NO;
+        _isDrawing = NO;
     }
     return self;
 }
@@ -118,7 +122,13 @@
     [self refresh];
 }
 
-#pragma mark - <FPLineDrawingDelegate>
+- (IBAction)smoothLinesToggle:(id)sender {
+    self.useLineSmoothing = ! self.useLineSmoothing;
+    [self refresh];
+}
+
+
+#pragma mark - <FPCanvasDataSource>
 
 -(NSArray *)drawings{
     NSMutableArray *result = [NSMutableArray new];
@@ -138,6 +148,9 @@
     return result;
 }
 
+-(BOOL)useSmoothing{
+    return self.useLineSmoothing;
+}
 #pragma mark - <FPColorChangeDelegate>
 
 -(void)colourPicked:(UIColor *)pickedColour{
