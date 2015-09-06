@@ -89,7 +89,6 @@ static int const DEBUGLEVEL = DBG_QUIET;
 #pragma mark - touch events
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    
     if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
     	NSLog(@"BEGAN:  << %lu >> %@", (unsigned long)[touches count], touches);
 
