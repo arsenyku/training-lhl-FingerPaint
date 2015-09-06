@@ -18,24 +18,24 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6g4-T4-62L" userLabel="ColorBox1" customClass="FPColourSelect">
-                                <rect key="frame" x="534" y="20" width="50" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="534" y="50" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Cb1-bl-Xu7"/>
                                     <constraint firstAttribute="width" constant="50" id="xQg-MZ-Pha"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mcs-Qd-hPN" userLabel="ColorBox2" customClass="FPColourSelect">
-                                <rect key="frame" x="534" y="78" width="50" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="534" y="108" width="50" height="50"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ZTl-fA-RAp"/>
                                     <constraint firstAttribute="width" constant="50" id="yGt-My-MJU"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WbI-Bo-98q" userLabel="ColorBox4" customClass="FPColourSelect">
-                                <rect key="frame" x="534" y="194" width="50" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="534" y="224" width="50" height="50"/>
+                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Er8-kY-25e"/>
                                     <constraint firstAttribute="width" constant="50" id="IxD-Qo-MeN"/>
@@ -55,8 +55,8 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Wt-YY-bOf" userLabel="ColorBox3" customClass="FPColourSelect">
-                                <rect key="frame" x="534" y="136" width="50" height="50"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="534" y="166" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Lmv-49-oav"/>
                                     <constraint firstAttribute="height" constant="50" id="vSn-nj-azJ"/>
@@ -92,37 +92,49 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="Mcs-Qd-hPN" firstAttribute="trailing" secondItem="4Wt-YY-bOf" secondAttribute="trailing" id="4wh-c6-hdh" userLabel="Box3 right"/>
+                            <constraint firstItem="Mcs-Qd-hPN" firstAttribute="trailing" secondItem="6g4-T4-62L" secondAttribute="trailing" id="9W8-5i-Nil" userLabel="Box2 right"/>
                             <constraint firstItem="WbI-Bo-98q" firstAttribute="top" secondItem="4Wt-YY-bOf" secondAttribute="bottom" constant="8" id="Ad6-GP-M3B" userLabel="Spacer 3 to 4"/>
-                            <constraint firstItem="Mcs-Qd-hPN" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="EaQ-vI-7NQ" userLabel="Box2 right"/>
                             <constraint firstItem="4Wt-YY-bOf" firstAttribute="top" secondItem="Mcs-Qd-hPN" secondAttribute="bottom" constant="8" id="PeR-Cf-vvX" userLabel="Spacer 2 to 3"/>
                             <constraint firstItem="6g4-T4-62L" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="QlY-sM-COY" userLabel="Box1 right"/>
-                            <constraint firstItem="4Wt-YY-bOf" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="TG4-AN-iU1" userLabel="Box3 right"/>
                             <constraint firstItem="xIr-dE-8u2" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="XZs-fi-QHe" userLabel="Clear left"/>
+                            <constraint firstItem="4Wt-YY-bOf" firstAttribute="trailing" secondItem="WbI-Bo-98q" secondAttribute="trailing" id="YUm-Ab-exp" userLabel="Box4 right"/>
                             <constraint firstItem="xIr-dE-8u2" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="20" id="YhX-71-ngR" userLabel="Clear top"/>
-                            <constraint firstItem="6g4-T4-62L" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="20" id="aPA-W8-AAM" userLabel="Box1 top"/>
+                            <constraint firstItem="6g4-T4-62L" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="50" id="aPA-W8-AAM" userLabel="Box1 top"/>
                             <constraint firstItem="g1H-i0-mZS" firstAttribute="top" secondItem="xIr-dE-8u2" secondAttribute="top" id="cVE-aG-eou" userLabel="Undo top"/>
-                            <constraint firstItem="WbI-Bo-98q" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="g25-xj-Mop" userLabel="Box4 right"/>
                             <constraint firstItem="g1H-i0-mZS" firstAttribute="leading" secondItem="xIr-dE-8u2" secondAttribute="trailing" constant="8" id="j9y-hT-DNQ" userLabel="Spacer Clear to Undo"/>
                             <constraint firstItem="Mcs-Qd-hPN" firstAttribute="top" secondItem="6g4-T4-62L" secondAttribute="bottom" constant="8" id="jEU-zr-z4E" userLabel="Spacer 1 to 2"/>
                             <constraint firstItem="1pZ-cH-gMe" firstAttribute="top" secondItem="xIr-dE-8u2" secondAttribute="top" id="oNc-Nq-bVU" userLabel="Smooth top"/>
                             <constraint firstItem="1pZ-cH-gMe" firstAttribute="leading" secondItem="g1H-i0-mZS" secondAttribute="trailing" constant="12" id="xzc-hp-ujb" userLabel="Spacer Undo to Smooth"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="h8m-cM-vmr" appends="YES" id="fyy-Ka-L6R"/>
+                        </connections>
                     </view>
                     <connections>
+                        <outlet property="box1RightConstraint" destination="QlY-sM-COY" id="Egd-ft-cm5"/>
                         <outlet property="canvas" destination="kh9-bI-dsS" id="4qL-1v-XZ2"/>
                         <outlet property="clearButton" destination="xIr-dE-8u2" id="9il-41-bP2"/>
+                        <outlet property="clearButtonTopConstraint" destination="YhX-71-ngR" id="ejY-Hb-nYd"/>
                         <outlet property="color1" destination="6g4-T4-62L" id="lbY-yy-8Ld"/>
                         <outlet property="color2" destination="Mcs-Qd-hPN" id="HZ9-yu-qWL"/>
                         <outlet property="color3" destination="4Wt-YY-bOf" id="Wlz-SJ-UK6"/>
                         <outlet property="color4" destination="WbI-Bo-98q" id="P4W-5V-uRj"/>
                         <outlet property="smoothButton" destination="1pZ-cH-gMe" id="mgQ-i1-FTq"/>
+                        <outlet property="swipeRecognizer" destination="h8m-cM-vmr" id="qsm-za-ksk"/>
                         <outlet property="undoButton" destination="g1H-i0-mZS" id="L4h-N0-tKN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="h8m-cM-vmr">
+                    <connections>
+                        <action selector="swipeDetected:" destination="vXZ-lx-hvc" id="3db-iV-0hR"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-573" y="52"/>
+            <point key="canvasLocation" x="-463" y="-485"/>
         </scene>
     </scenes>
 </document>

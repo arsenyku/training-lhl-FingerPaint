@@ -77,8 +77,7 @@
 -(UIColor*)invertColour:(UIColor*)colour{
     CGFloat hue, saturation, brightness, alpha;
     [colour getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
-    NSLog(@"%@", colour);
-    NSLog(@"%f, %f, %f, %f", hue, saturation, brightness, alpha);
+
     return [UIColor colorWithHue:1.0-hue saturation:saturation brightness:brightness alpha:alpha];
 }
 

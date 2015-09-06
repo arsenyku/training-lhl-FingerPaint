@@ -20,6 +20,8 @@
 @property (strong, nonatomic) FPDrawing *currentDrawing;
 @property (assign, nonatomic) SmoothingMode lineSmoothing;
 @property (assign, nonatomic) BOOL isDrawing;
+@property (assign, nonatomic) BOOL showOptions;
+
 
 @property (strong, nonatomic) IBOutlet FPCanvasView *canvas;
 @property (weak, nonatomic) IBOutlet FPColourSelect *color1;
@@ -30,7 +32,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *undoButton;
 @property (weak, nonatomic) IBOutlet UIButton *smoothButton;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *box1RightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *clearButtonTopConstraint;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeRecognizer;
 @end
+
+static int const DBG_VERBOSE = 100;
+static int const DBG_GESTURE_EVENTS = 3;
+static int const DBG_TOUCH_EVENTS = 2;
+static int const DBG_QUIET  = 0 ;
+static int const DEBUGLEVEL = DBG_QUIET;
 
 @implementation FPMainViewController
 
@@ -53,16 +64,19 @@
     
     self.canvas.delegate = self;
     
-    self.color1.backgroundColor = [UIColor blueColor];
-    self.color2.backgroundColor = [UIColor redColor];
-    self.color3.backgroundColor = [UIColor greenColor];
-    self.color4.backgroundColor = [UIColor yellowColor];
-    
     self.color1.delegate = self;
     self.color2.delegate = self;
     self.color3.delegate = self;
     self.color4.delegate = self;
+    self.showOptions = YES;
 
+    self.swipeRecognizer.delaysTouchesBegan = YES;
+    self.swipeRecognizer.numberOfTouchesRequired = 2;
+    self.swipeRecognizer.direction = UISwipeGestureRecognizerDirectionLeft |
+                                     UISwipeGestureRecognizerDirectionRight |
+    								 UISwipeGestureRecognizerDirectionUp |
+    								 UISwipeGestureRecognizerDirectionDown 	;
+    
     [self startNewDrawingWithColour:self.color1.backgroundColor];
     [self refresh];
 }
@@ -75,7 +89,9 @@
 #pragma mark - touch events
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"BEGAN:  << %lu >> %@", (unsigned long)[touches count], touches);
+    
+    if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
+    	NSLog(@"BEGAN:  << %lu >> %@", (unsigned long)[touches count], touches);
 
     self.isDrawing = YES;
     
@@ -87,7 +103,8 @@
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"MOVED: %@", touches);
+    if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
+	    NSLog(@"MOVED: %@", touches);
     
     CGPoint point = [[touches anyObject] locationInView:self.view];
     [self.currentDrawing addPoint:point];
@@ -95,7 +112,8 @@
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"ENDED: << %lu >> %@", (unsigned long)[touches count], touches);
+    if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
+	    NSLog(@"ENDED: << %lu >> %@", (unsigned long)[touches count], touches);
     
     self.isDrawing = NO;
 
@@ -104,6 +122,7 @@
     
     [self refresh];
 }
+
 
 
 - (IBAction)clearCanvas:(id)sender {
@@ -145,6 +164,14 @@
     [self refresh];
 }
 
+- (IBAction)swipeDetected:(id)sender {
+    if (DEBUGLEVEL == DBG_GESTURE_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
+	    NSLog(@"SWIPE: %@", sender);
+
+    self.showOptions = ! self.showOptions;
+    [self refresh];
+}
+
 
 #pragma mark - <FPCanvasDataSource>
 
@@ -156,7 +183,7 @@
         for (NSArray *point in drawing.points) {
             [pointsForDrawing addObject:point];
         }
- 
+        
         NSDictionary *drawingData = @{ @"colour":drawing.brushColour,
                                        @"points":pointsForDrawing };
         
@@ -177,11 +204,26 @@
 
 #pragma mark - private
 
--(void)toggleControl:(UIView*)view{
-    [UIView animateWithDuration:0.5 animations:^{
-        view.alpha = self.isDrawing ? 0 : 1 ;
+
+
+-(void)toggleControlVisibility{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.color1.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.color2.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.color3.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.color4.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.clearButton.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.undoButton.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.smoothButton.alpha = self.isDrawing ? 0.0 : 1.0;
     }];
-    view.userInteractionEnabled = !self.isDrawing;
+}
+
+-(void)toggleControlPosition{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.box1RightConstraint.constant = self.showOptions ? 0.0 : 1000.0 ;
+        self.clearButtonTopConstraint.constant = self.showOptions ? +20.0 : -100.0 ;
+        [self.view layoutIfNeeded];
+    }];
 }
 
 -(void)adjustSmoothingText{
@@ -202,13 +244,8 @@
 }
 
 -(void)refresh{
-    [self toggleControl:self.color1];
-    [self toggleControl:self.color2];
-    [self toggleControl:self.color3];
-    [self toggleControl:self.color4];
-    [self toggleControl:self.clearButton];
-    [self toggleControl:self.undoButton];
-    [self toggleControl:self.smoothButton];
+    [self toggleControlPosition];
+    [self toggleControlVisibility];
     [self adjustSmoothingText];
     
     [self.view setNeedsDisplay];
