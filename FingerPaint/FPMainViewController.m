@@ -35,7 +35,8 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *box1RightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *clearButtonTopConstraint;
-@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeRecognizer;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *leftRightSwipeRecognizer;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *upDownSwipeRecognizer;
 
 @property (strong, nonatomic) UIColor *buttonHighlightColour;
 @end
@@ -76,12 +77,19 @@ static int const EraserWidth = 30;
 
     [self setupButtons];
     
-    self.swipeRecognizer.delaysTouchesBegan = NO;
-    self.swipeRecognizer.numberOfTouchesRequired = 2;
-    self.swipeRecognizer.direction = UISwipeGestureRecognizerDirectionLeft |
-                                     UISwipeGestureRecognizerDirectionRight |
-    								 UISwipeGestureRecognizerDirectionUp |
-    								 UISwipeGestureRecognizerDirectionDown 	;
+    
+    // Using only one Swipe recognizer would cause only vertical or only horizontal
+    // swipes to be recognized even when the direction property was set to include
+    // all 4 directions.  Two recognizers were required.
+    //
+    self.leftRightSwipeRecognizer.delaysTouchesBegan = YES;
+    self.leftRightSwipeRecognizer.numberOfTouchesRequired = 2;
+    self.leftRightSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight ;
+    
+    self.upDownSwipeRecognizer.delaysTouchesBegan = YES;
+    self.upDownSwipeRecognizer.numberOfTouchesRequired = 2;
+    self.upDownSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionUp | UISwipeGestureRecognizerDirectionDown ;
+    [self.upDownSwipeRecognizer requireGestureRecognizerToFail:self.leftRightSwipeRecognizer];
     
     [self startNewDrawingWithColour:self.color1.backgroundColor];
     [self refresh];
@@ -194,6 +202,9 @@ static int const EraserWidth = 30;
 }
 
 - (IBAction)textMode:(UIButton *)sender {
+    if (self.isErasing)
+        self.currentDrawing.brushColour = self.color1.backgroundColor;
+    
     self.isWriting = YES;
     self.isErasing = NO;
 
@@ -336,10 +347,16 @@ static int const EraserWidth = 30;
                                                  style:UIAlertActionStyleDefault
                                                handler:^(UIAlertAction *action) {
                                                    NSString* text = ((UITextField*)alertController.textFields.firstObject).text;
+
+                                                   [self.drawingsArray removeLastObject];
+                                                   
                                                    [self.drawingsArray addObject:[[FPTextPoint alloc] initWithText:text
                                                                                                            atPoint:point
                                                                                                             colour:self.currentDrawing.brushColour
                                                                                                           fontSize:15]];
+
+                                                   [self.drawingsArray addObject:self.currentDrawing];
+                                                   
                                                    self.isWriting = NO;
                                                    [self refresh];
                                                }];

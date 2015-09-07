@@ -166,6 +166,7 @@
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="h8m-cM-vmr" appends="YES" id="fyy-Ka-L6R"/>
+                            <outletCollection property="gestureRecognizers" destination="sip-gT-2IE" appends="YES" id="Jgd-Iq-kaJ"/>
                         </connections>
                     </view>
                     <connections>
@@ -178,16 +179,22 @@
                         <outlet property="color3" destination="4Wt-YY-bOf" id="Wlz-SJ-UK6"/>
                         <outlet property="color4" destination="WbI-Bo-98q" id="P4W-5V-uRj"/>
                         <outlet property="eraseButton" destination="rEe-8l-9Qx" id="BR3-dH-pgU"/>
+                        <outlet property="leftRightSwipeRecognizer" destination="h8m-cM-vmr" id="44a-3F-evj"/>
                         <outlet property="smoothButton" destination="1pZ-cH-gMe" id="mgQ-i1-FTq"/>
-                        <outlet property="swipeRecognizer" destination="h8m-cM-vmr" id="qsm-za-ksk"/>
                         <outlet property="textModeButton" destination="rFa-Uu-6MS" id="nyl-a7-pY2"/>
                         <outlet property="undoButton" destination="g1H-i0-mZS" id="L4h-N0-tKN"/>
+                        <outlet property="upDownSwipeRecognizer" destination="sip-gT-2IE" id="N6y-kQ-LlS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <swipeGestureRecognizer direction="right" id="h8m-cM-vmr">
                     <connections>
                         <action selector="swipeDetected:" destination="vXZ-lx-hvc" id="3db-iV-0hR"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="sip-gT-2IE">
+                    <connections>
+                        <action selector="swipeDetected:" destination="vXZ-lx-hvc" id="NWa-Zv-b8U"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
