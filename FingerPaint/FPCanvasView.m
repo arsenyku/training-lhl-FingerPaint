@@ -27,8 +27,9 @@
         UIBezierPath *path = [UIBezierPath new];
 
         UIColor *brushColour = drawingData[ @"colour" ];
-        //UIColor *overlayColour = [UIColor colorWithRed:255.0/255.0 green:72.0/255.0 blue:245.0/255.0 alpha:1.0];
         UIColor *overlayColour = [self invertColour:brushColour];
+        
+        int strokeWidth = [(NSNumber*)drawingData[ @"width" ] intValue];
 
         NSArray *drawingPoints = drawingData[ @"points" ];
         
@@ -51,6 +52,9 @@
         
         UIBezierPath *interpolated = [UIBezierPath interpolateCGPointsWithHermite:drawingPoints closed:NO];
 
+        interpolated.lineWidth = strokeWidth;
+        path.lineWidth = strokeWidth;
+        
         switch (smoothingMode) {
             case Off:
                 [brushColour setStroke];

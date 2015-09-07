@@ -21,7 +21,7 @@
     self = [super init];
     if (self) {
         _brushColour = [UIColor blackColor];
-        _strokeWidth = 10;
+        _strokeWidth = 1;
         _pointsList = [NSMutableArray new];
     }
     return self;

@@ -9,28 +9,27 @@
 #import "FPMainViewController.h"
 #import "FPDrawing.h"
 #import "FPCanvasView.h"
-#import "FPColourSelect.h"
 
 
-
-
-@interface FPMainViewController () <FPCanvasDataSource, FPColourChangeDelegate>
+@interface FPMainViewController () <FPCanvasDataSource>
 
 @property (strong, nonatomic) NSMutableArray *drawingsArray;
 @property (strong, nonatomic) FPDrawing *currentDrawing;
 @property (assign, nonatomic) SmoothingMode lineSmoothing;
 @property (assign, nonatomic) BOOL isDrawing;
+@property (assign, nonatomic) BOOL isErasing;
 @property (assign, nonatomic) BOOL showOptions;
 
 
 @property (strong, nonatomic) IBOutlet FPCanvasView *canvas;
-@property (weak, nonatomic) IBOutlet FPColourSelect *color1;
-@property (weak, nonatomic) IBOutlet FPColourSelect *color2;
-@property (weak, nonatomic) IBOutlet FPColourSelect *color3;
-@property (weak, nonatomic) IBOutlet FPColourSelect *color4;
+@property (weak, nonatomic) IBOutlet UIButton *color1;
+@property (weak, nonatomic) IBOutlet UIButton *color2;
+@property (weak, nonatomic) IBOutlet UIButton *color3;
+@property (weak, nonatomic) IBOutlet UIButton *color4;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UIButton *undoButton;
 @property (weak, nonatomic) IBOutlet UIButton *smoothButton;
+@property (weak, nonatomic) IBOutlet UIButton *eraseButton;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *box1RightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *clearButtonTopConstraint;
@@ -53,6 +52,7 @@ static int const DEBUGLEVEL = DBG_QUIET;
         _currentDrawing = nil;
         _lineSmoothing = NO;
         _isDrawing = NO;
+        _isErasing = NO;
     }
     return self;
 }
@@ -64,11 +64,9 @@ static int const DEBUGLEVEL = DBG_QUIET;
     
     self.canvas.delegate = self;
     
-    self.color1.delegate = self;
-    self.color2.delegate = self;
-    self.color3.delegate = self;
-    self.color4.delegate = self;
     self.showOptions = YES;
+
+    self.eraseButton.layer.borderWidth = 0.3f;
 
     self.swipeRecognizer.delaysTouchesBegan = YES;
     self.swipeRecognizer.numberOfTouchesRequired = 2;
@@ -163,6 +161,23 @@ static int const DEBUGLEVEL = DBG_QUIET;
     [self refresh];
 }
 
+- (IBAction)eraserMode:(id)sender {
+    self.currentDrawing.strokeWidth = 30.0;
+    self.currentDrawing.brushColour = self.view.backgroundColor;
+    self.isErasing = YES;
+    
+    [self refresh];
+}
+
+- (IBAction)colourButtonPressed:(UIButton *)sender {
+    self.currentDrawing.strokeWidth = 1.0;
+    self.currentDrawing.brushColour = sender.backgroundColor;
+    self.isErasing = NO;
+
+    [self refresh];
+}
+
+
 - (IBAction)swipeDetected:(id)sender {
     if (DEBUGLEVEL == DBG_GESTURE_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
 	    NSLog(@"SWIPE: %@", sender);
@@ -184,6 +199,7 @@ static int const DEBUGLEVEL = DBG_QUIET;
         }
         
         NSDictionary *drawingData = @{ @"colour":drawing.brushColour,
+                                       @"width":[NSNumber numberWithInt:drawing.strokeWidth],
                                        @"points":pointsForDrawing };
         
         [result addObject:drawingData];
@@ -199,10 +215,10 @@ static int const DEBUGLEVEL = DBG_QUIET;
 
 -(void)colourPicked:(UIColor *)pickedColour{
     self.currentDrawing.brushColour = pickedColour;
+    self.currentDrawing.brushColour = pickedColour;
 }
 
 #pragma mark - private
-
 
 
 -(void)toggleControlVisibility{
@@ -214,6 +230,13 @@ static int const DEBUGLEVEL = DBG_QUIET;
         self.clearButton.alpha = self.isDrawing ? 0.0 : 1.0;
         self.undoButton.alpha = self.isDrawing ? 0.0 : 1.0;
         self.smoothButton.alpha = self.isDrawing ? 0.0 : 1.0;
+        self.eraseButton.alpha = self.isDrawing ? 0.0 : 1.0;
+        
+        if (self.isErasing)
+            self.eraseButton.backgroundColor = [UIColor colorWithRed:164.0/255.0 green:205.0/255.0 blue:255.0/255.0 alpha:1.0];
+        else
+            self.eraseButton.backgroundColor = self.view.backgroundColor;
+        
     }];
 }
 
