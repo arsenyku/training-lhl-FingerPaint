@@ -8,6 +8,7 @@
 
 #import "FPMainViewController.h"
 #import "FPDrawing.h"
+#import "FPTextPoint.h"
 #import "FPCanvasView.h"
 
 
@@ -15,9 +16,9 @@
 
 @property (strong, nonatomic) NSMutableArray *drawingsArray;
 @property (strong, nonatomic) FPDrawing *currentDrawing;
-@property (assign, nonatomic) SmoothingMode lineSmoothing;
 @property (assign, nonatomic) BOOL isDrawing;
 @property (assign, nonatomic) BOOL isErasing;
+@property (assign, nonatomic) BOOL isWriting;
 @property (assign, nonatomic) BOOL showOptions;
 
 
@@ -30,10 +31,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *undoButton;
 @property (weak, nonatomic) IBOutlet UIButton *smoothButton;
 @property (weak, nonatomic) IBOutlet UIButton *eraseButton;
+@property (weak, nonatomic) IBOutlet UIButton *textModeButton;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *box1RightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *clearButtonTopConstraint;
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeRecognizer;
+
+@property (strong, nonatomic) UIColor *buttonHighlightColour;
 @end
 
 static int const DBG_VERBOSE = 100;
@@ -41,6 +45,8 @@ static int const DBG_GESTURE_EVENTS = 3;
 static int const DBG_TOUCH_EVENTS = 2;
 static int const DBG_QUIET  = 0 ;
 static int const DEBUGLEVEL = DBG_QUIET;
+
+static int const EraserWidth = 30;
 
 @implementation FPMainViewController
 
@@ -50,9 +56,11 @@ static int const DEBUGLEVEL = DBG_QUIET;
     if (self) {
         _drawingsArray = [NSMutableArray new];
         _currentDrawing = nil;
-        _lineSmoothing = NO;
+        _canvas.smoothingMode = Off;
         _isDrawing = NO;
         _isErasing = NO;
+        _isWriting = NO;
+        _buttonHighlightColour = [UIColor colorWithRed:164.0/255.0 green:205.0/255.0 blue:255.0/255.0 alpha:1.0];
     }
     return self;
 }
@@ -66,9 +74,9 @@ static int const DEBUGLEVEL = DBG_QUIET;
     
     self.showOptions = YES;
 
-    self.eraseButton.layer.borderWidth = 0.3f;
-
-    self.swipeRecognizer.delaysTouchesBegan = YES;
+    [self setupButtons];
+    
+    self.swipeRecognizer.delaysTouchesBegan = NO;
     self.swipeRecognizer.numberOfTouchesRequired = 2;
     self.swipeRecognizer.direction = UISwipeGestureRecognizerDirectionLeft |
                                      UISwipeGestureRecognizerDirectionRight |
@@ -90,9 +98,15 @@ static int const DEBUGLEVEL = DBG_QUIET;
     if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
     	NSLog(@"BEGAN:  << %lu >> %@", (unsigned long)[touches count], touches);
 
+    CGPoint point = [[touches anyObject] locationInView:self.view];
+    
+    if (self.isWriting){
+        [self writingBeganAtPoint:point];
+        return;
+    }
+    
     self.isDrawing = YES;
     
-    CGPoint point = [[touches anyObject] locationInView:self.view];
     [self.currentDrawing addPoint:point];
 
     [self refresh];
@@ -143,18 +157,18 @@ static int const DEBUGLEVEL = DBG_QUIET;
 }
 
 - (IBAction)smoothLinesToggle:(id)sender {
-    switch (self.lineSmoothing) {
+    switch (self.canvas.smoothingMode) {
         case Off:
-            self.lineSmoothing = Overlay;
+            self.canvas.smoothingMode = Overlay;
             break;
 
         case Overlay:
-            self.lineSmoothing = SmoothOnly;
+            self.canvas.smoothingMode = SmoothOnly;
             break;
             
         case SmoothOnly:
         default:
-            self.lineSmoothing = Off;
+            self.canvas.smoothingMode = Off;
             break;
     }
     
@@ -162,9 +176,10 @@ static int const DEBUGLEVEL = DBG_QUIET;
 }
 
 - (IBAction)eraserMode:(id)sender {
-    self.currentDrawing.strokeWidth = 30.0;
+    self.currentDrawing.strokeWidth = EraserWidth;
     self.currentDrawing.brushColour = self.view.backgroundColor;
     self.isErasing = YES;
+    self.isWriting = NO;
     
     [self refresh];
 }
@@ -173,10 +188,17 @@ static int const DEBUGLEVEL = DBG_QUIET;
     self.currentDrawing.strokeWidth = 1.0;
     self.currentDrawing.brushColour = sender.backgroundColor;
     self.isErasing = NO;
+    self.isWriting = NO;
 
     [self refresh];
 }
 
+- (IBAction)textMode:(UIButton *)sender {
+    self.isWriting = YES;
+    self.isErasing = NO;
+
+    [self refresh];
+}
 
 - (IBAction)swipeDetected:(id)sender {
     if (DEBUGLEVEL == DBG_GESTURE_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
@@ -192,64 +214,79 @@ static int const DEBUGLEVEL = DBG_QUIET;
 -(NSArray *)drawings{
     NSMutableArray *result = [NSMutableArray new];
     
-    for (FPDrawing *drawing in self.drawingsArray) {
-        NSMutableArray *pointsForDrawing = [NSMutableArray new];
-        for (NSArray *point in drawing.points) {
-            [pointsForDrawing addObject:point];
+    for (id content in self.drawingsArray) {
+        
+        if ([content isKindOfClass:[FPDrawing class]]){
+            FPDrawing* drawing = content;
+            NSMutableArray *pointsForDrawing = [NSMutableArray new];
+            for (NSArray *point in drawing.points) {
+                [pointsForDrawing addObject:point];
+            }
+            
+            NSDictionary *drawingData = @{ @"colour":drawing.brushColour,
+                                           @"width":[NSNumber numberWithInt:drawing.strokeWidth],
+                                           @"points":pointsForDrawing };
+            
+            [result addObject:drawingData];
         }
         
-        NSDictionary *drawingData = @{ @"colour":drawing.brushColour,
-                                       @"width":[NSNumber numberWithInt:drawing.strokeWidth],
-                                       @"points":pointsForDrawing };
-        
-        [result addObject:drawingData];
+        if ([content isKindOfClass:[FPTextPoint class]]){
+            FPTextPoint *textPoint = content;
+            
+            NSDictionary *textPointData = @{ @"text":textPoint.text,
+                                             @"font":textPoint.font,
+                                             @"colour":textPoint.colour,
+                                             @"point":textPoint.pointAsValue
+                                            };
+            [result addObject:textPointData];
+        }
     }
     
     return result;
 }
 
--(SmoothingMode)smoothingMode{
-    return self.lineSmoothing;
-}
-#pragma mark - <FPColorChangeDelegate>
-
--(void)colourPicked:(UIColor *)pickedColour{
-    self.currentDrawing.brushColour = pickedColour;
-    self.currentDrawing.brushColour = pickedColour;
-}
 
 #pragma mark - private
 
+-(void)setupButtons{
 
--(void)toggleControlVisibility{
+    NSArray *buttons = @[self.color1, self.color2, self.color3, self.color4,
+                         self.eraseButton, self.textModeButton];
+    
+    for (UIButton *button in buttons) {
+        button.layer.cornerRadius = 10;
+        button.clipsToBounds = YES;
+    }
+    
+    self.eraseButton.layer.borderWidth = 0.5f;
+    self.eraseButton.layer.borderColor = [self.buttonHighlightColour CGColor];
+    self.textModeButton.layer.borderWidth = 0.5f;
+    self.textModeButton.layer.borderColor = [self.buttonHighlightColour CGColor];
+
+}
+
+-(void)toggleButtonAppearance{
     [UIView animateWithDuration:0.3 animations:^{
-        self.color1.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.color2.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.color3.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.color4.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.clearButton.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.undoButton.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.smoothButton.alpha = self.isDrawing ? 0.0 : 1.0;
-        self.eraseButton.alpha = self.isDrawing ? 0.0 : 1.0;
+        NSArray *buttons = @[self.color1, self.color2, self.color3, self.color4,
+                             self.eraseButton, self.textModeButton,
+                             self.clearButton, self.undoButton, self.smoothButton];
         
-        if (self.isErasing)
-            self.eraseButton.backgroundColor = [UIColor colorWithRed:164.0/255.0 green:205.0/255.0 blue:255.0/255.0 alpha:1.0];
-        else
-            self.eraseButton.backgroundColor = self.view.backgroundColor;
-        
+        for (UIButton *button in buttons) {
+            button.alpha = self.isDrawing ? 0.0 : 1.0;
+        }
     }];
-}
-
--(void)toggleControlPosition{
-    [UIView animateWithDuration:0.5 animations:^{
-        self.box1RightConstraint.constant = self.showOptions ? 0.0 : 1000.0 ;
-        self.clearButtonTopConstraint.constant = self.showOptions ? +20.0 : -100.0 ;
-        [self.view layoutIfNeeded];
-    }];
-}
-
--(void)adjustSmoothingText{
-    switch(self.lineSmoothing){
+    
+    if (self.isErasing)
+        self.eraseButton.backgroundColor = self.buttonHighlightColour;
+    else
+        self.eraseButton.backgroundColor = self.view.backgroundColor;
+    
+    if (self.isWriting)
+        self.textModeButton.backgroundColor = self.buttonHighlightColour;
+    else
+        self.textModeButton.backgroundColor = self.view.backgroundColor;
+    
+    switch(self.canvas.smoothingMode){
         case Off:
             [self.smoothButton setTitle:@"No Smoothing" forState:UIControlStateNormal];
             break;
@@ -265,10 +302,18 @@ static int const DEBUGLEVEL = DBG_QUIET;
     }
 }
 
+-(void)toggleControlPosition{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.box1RightConstraint.constant = self.showOptions ? 0.0 : 1000.0 ;
+        self.clearButtonTopConstraint.constant = self.showOptions ? +20.0 : -100.0 ;
+        [self.view layoutIfNeeded];
+    }];
+}
+
+
 -(void)refresh{
     [self toggleControlPosition];
-    [self toggleControlVisibility];
-    [self adjustSmoothingText];
+    [self toggleButtonAppearance];
     
     [self.view setNeedsDisplay];
 }
@@ -276,7 +321,40 @@ static int const DEBUGLEVEL = DBG_QUIET;
 -(void)startNewDrawingWithColour:(UIColor*)colour{
     self.currentDrawing = [FPDrawing new];
     self.currentDrawing.brushColour = colour;
+    self.currentDrawing.strokeWidth = self.isErasing ? EraserWidth : 1.0;
     [self.drawingsArray addObject:self.currentDrawing];
 }
 
+-(void)writingBeganAtPoint:(CGPoint)point{
+    
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"Enter some text"
+                                          message:@""
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction *action) {
+                                                   NSString* text = ((UITextField*)alertController.textFields.firstObject).text;
+                                                   [self.drawingsArray addObject:[[FPTextPoint alloc] initWithText:text
+                                                                                                           atPoint:point
+                                                                                                            colour:self.currentDrawing.brushColour
+                                                                                                          fontSize:15]];
+                                                   self.isWriting = NO;
+                                                   [self refresh];
+                                               }];
+    UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction *action) {
+                                                       self.isWriting = NO;
+                                                       [self refresh];
+                                                   }];
+    
+    [alertController addAction:ok];
+    [alertController addAction:cancel];
+    [alertController addTextFieldWithConfigurationHandler:nil];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+}
 @end

@@ -17,9 +17,9 @@ typedef NS_ENUM(NSInteger, SmoothingMode) {
 
 @protocol FPCanvasDataSource <NSObject>
 -(NSArray*)drawings;
--(SmoothingMode)smoothingMode;
 @end
 
 @interface FPCanvasView : UIView
+@property (nonatomic, assign) SmoothingMode smoothingMode;
 @property (nonatomic, weak) id<FPCanvasDataSource> delegate;
 @end

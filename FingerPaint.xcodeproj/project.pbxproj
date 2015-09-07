@@ -18,6 +18,7 @@
 		125300A91B9A389F001A7C6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 125300A81B9A389F001A7C6A /* Images.xcassets */; };
 		125300AC1B9A389F001A7C6A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 125300AA1B9A389F001A7C6A /* LaunchScreen.xib */; };
 		125300B81B9A389F001A7C6A /* FingerPaintTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 125300B71B9A389F001A7C6A /* FingerPaintTests.m */; };
+		1258B5841B9D510F00F88D07 /* FPTextPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1258B5831B9D510F00F88D07 /* FPTextPoint.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		125300B11B9A389F001A7C6A /* FingerPaintTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FingerPaintTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		125300B61B9A389F001A7C6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		125300B71B9A389F001A7C6A /* FingerPaintTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FingerPaintTests.m; sourceTree = "<group>"; };
+		1258B5821B9D510F00F88D07 /* FPTextPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPTextPoint.h; sourceTree = "<group>"; };
+		1258B5831B9D510F00F88D07 /* FPTextPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPTextPoint.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,8 @@
 				125300A31B9A389F001A7C6A /* FPMainViewController.m */,
 				123B61C71B9A45E800A34F90 /* FPDrawing.h */,
 				123B61C81B9A45E800A34F90 /* FPDrawing.m */,
+				1258B5821B9D510F00F88D07 /* FPTextPoint.h */,
+				1258B5831B9D510F00F88D07 /* FPTextPoint.m */,
 				123B61D61B9A9B8400A34F90 /* CGPointExtension.h */,
 				123B61D71B9A9B8400A34F90 /* CGPointExtension.m */,
 				123B61D31B9A9AD100A34F90 /* UIBezierPath+Interpolation.h */,
@@ -244,6 +249,7 @@
 				123B61CF1B9A4BB400A34F90 /* FPCanvasView.m in Sources */,
 				123B61D51B9A9AD100A34F90 /* UIBezierPath+Interpolation.m in Sources */,
 				125300A11B9A389F001A7C6A /* FPAppDelegate.m in Sources */,
+				1258B5841B9D510F00F88D07 /* FPTextPoint.m in Sources */,
 				123B61D81B9A9B8400A34F90 /* CGPointExtension.m in Sources */,
 				1253009E1B9A389F001A7C6A /* main.m in Sources */,
 			);

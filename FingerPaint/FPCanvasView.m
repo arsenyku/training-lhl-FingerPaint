@@ -21,62 +21,78 @@
     
     NSArray *drawings = [self.delegate drawings];
 
-    SmoothingMode smoothingMode = self.delegate.smoothingMode;
-
     for (NSDictionary *drawingData in drawings) {
-        UIBezierPath *path = [UIBezierPath new];
-
-        UIColor *brushColour = drawingData[ @"colour" ];
-        UIColor *overlayColour = [self invertColour:brushColour];
         
-        int strokeWidth = [(NSNumber*)drawingData[ @"width" ] intValue];
-
-        NSArray *drawingPoints = drawingData[ @"points" ];
-        
-        if ([drawingPoints count] < 1)
-            continue;
-        
-        CGPoint firstPoint = [((NSValue*)(drawingPoints[0])) CGPointValue];
-        [path moveToPoint:firstPoint];
-
-        
-        for (NSValue *pointValue in drawingPoints) {
+        if (drawingData[@"text"] != nil){
+            NSString *text = drawingData[ @"text" ];
+            UIColor *textColour = drawingData [ @"colour" ];
+            CGPoint point = [(NSValue*)drawingData[ @"point" ] CGPointValue];
+            UIFont *font = drawingData[ @"font" ];
             
-            CGPoint point = [pointValue CGPointValue];
+            [self drawText:text atPoint:point withColour:textColour font:font];
             
-            if (point.x == firstPoint.x && point.y == firstPoint.y)
-                continue;
+        } else {
+            UIColor *brushColour = drawingData[ @"colour" ];
+            int strokeWidth = [(NSNumber*)drawingData[ @"width" ] intValue];
+            NSArray *drawingPoints = drawingData[ @"points" ];
             
-            [path addLineToPoint:point];
+            [self drawWithPoints:drawingPoints brushColour:brushColour strokeWidth:strokeWidth];
         }
-        
-        UIBezierPath *interpolated = [UIBezierPath interpolateCGPointsWithHermite:drawingPoints closed:NO];
-
-        interpolated.lineWidth = strokeWidth;
-        path.lineWidth = strokeWidth;
-        
-        switch (smoothingMode) {
-            case Off:
-                [brushColour setStroke];
-                [path stroke];
-                break;
-                
-            case Overlay:
-                [overlayColour setStroke];
-                [interpolated stroke];
-                [brushColour setStroke];
-                [path stroke];
-                break;
-                
-            case SmoothOnly:
-            default:
-                [brushColour setStroke];
-                [interpolated stroke];
-                break;
-        }
-        
     }
 }
+
+-(void)drawWithPoints:(NSArray*)drawingPoints brushColour:(UIColor*)brushColour strokeWidth:(int)strokeWidth{
+    UIBezierPath *path = [UIBezierPath new];
+
+    UIColor *overlayColour = [self invertColour:brushColour];
+    
+    if ([drawingPoints count] < 1)
+        return;
+    
+    CGPoint firstPoint = [((NSValue*)(drawingPoints[0])) CGPointValue];
+    [path moveToPoint:firstPoint];
+    
+    
+    for (NSValue *pointValue in drawingPoints) {
+        
+        CGPoint point = [pointValue CGPointValue];
+        
+        if (point.x == firstPoint.x && point.y == firstPoint.y)
+            continue;
+        
+        [path addLineToPoint:point];
+    }
+    
+    UIBezierPath *interpolated = [UIBezierPath interpolateCGPointsWithHermite:drawingPoints closed:NO];
+    
+    interpolated.lineWidth = strokeWidth;
+    path.lineWidth = strokeWidth;
+    
+    switch (self.smoothingMode) {
+        case Off:
+            [brushColour setStroke];
+            [path stroke];
+            break;
+            
+        case Overlay:
+            [overlayColour setStroke];
+            [interpolated stroke];
+            [brushColour setStroke];
+            [path stroke];
+            break;
+            
+        case SmoothOnly:
+        default:
+            [brushColour setStroke];
+            [interpolated stroke];
+            break;
+    }
+}
+
+-(void)drawText:(NSString*)text atPoint:(CGPoint)point withColour:(UIColor*)textColour font:(UIFont*)font{
+    [text drawAtPoint:point withAttributes:@{ NSFontAttributeName : font, NSForegroundColorAttributeName:textColour }];
+}
+
 
 -(UIColor*)invertColour:(UIColor*)colour{
     CGFloat hue, saturation, brightness, alpha;

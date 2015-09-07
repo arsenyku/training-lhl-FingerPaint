@@ -52,8 +52,8 @@
                                     <action selector="clearCanvas:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="JBF-yN-yzD"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Wt-YY-bOf" userLabel="ColorBox3" customClass="UIButton">
-                                <rect key="frame" x="534" y="167" width="50" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Wt-YY-bOf" userLabel="ColorBox3" customClass="UIButton">
+                                <rect key="frame" x="534" y="166" width="50" height="50"/>
                                 <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Lmv-49-oav"/>
@@ -91,8 +91,35 @@
                                     <action selector="undo:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="7Z4-PO-h1A"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6g4-T4-62L" userLabel="ColorBox1" customClass="UIButton">
+                                <rect key="frame" x="534" y="50" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Cb1-bl-Xu7"/>
+                                    <constraint firstAttribute="width" constant="50" id="xQg-MZ-Pha"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="colourButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="0Dj-do-NOe"/>
+                                </connections>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rFa-Uu-6MS" userLabel="Text">
+                                <rect key="frame" x="534" y="290" width="50" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="0dh-6F-8VL"/>
+                                    <constraint firstAttribute="height" constant="50" id="K5c-z3-Jl0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="TimesNewRomanPS-BoldMT" family="Times New Roman" pointSize="50"/>
+                                <state key="normal" title="T">
+                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="textMode:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="IWb-lf-7PU"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="rEe-8l-9Qx" userLabel="Erase">
-                                <rect key="frame" x="534" y="304" width="50" height="50"/>
+                                <rect key="frame" x="534" y="356" width="50" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="clS-qK-dvH"/>
@@ -106,34 +133,33 @@
                                     <action selector="eraserMode:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="OrX-iV-qKy"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6g4-T4-62L" userLabel="ColorBox1" customClass="UIButton">
-                                <rect key="frame" x="534" y="50" width="50" height="50"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Cb1-bl-Xu7"/>
-                                    <constraint firstAttribute="width" constant="50" id="xQg-MZ-Pha"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="colourButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="0Dj-do-NOe"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="rEe-8l-9Qx" firstAttribute="top" secondItem="WbI-Bo-98q" secondAttribute="bottom" constant="30" id="3h3-QV-cWn" userLabel="Spacer 4 to Erase"/>
                             <constraint firstItem="Mcs-Qd-hPN" firstAttribute="trailing" secondItem="4Wt-YY-bOf" secondAttribute="trailing" id="4wh-c6-hdh" userLabel="Box3 right"/>
                             <constraint firstItem="Mcs-Qd-hPN" firstAttribute="trailing" secondItem="6g4-T4-62L" secondAttribute="trailing" id="9W8-5i-Nil" userLabel="Box2 right"/>
-                            <constraint firstItem="WbI-Bo-98q" firstAttribute="top" secondItem="4Wt-YY-bOf" secondAttribute="bottom" constant="8" id="Ad6-GP-M3B" userLabel="Spacer 3 to 4"/>
-                            <constraint firstItem="4Wt-YY-bOf" firstAttribute="top" secondItem="Mcs-Qd-hPN" secondAttribute="bottom" constant="8" id="PeR-Cf-vvX" userLabel="Spacer 2 to 3"/>
+                            <constraint firstItem="WbI-Bo-98q" firstAttribute="top" secondItem="4Wt-YY-bOf" secondAttribute="bottom" constant="8" id="Ad6-GP-M3B" userLabel="Spacer 3 to 4">
+                                <variation key="heightClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="rEe-8l-9Qx" firstAttribute="top" secondItem="rFa-Uu-6MS" secondAttribute="bottom" constant="16" id="Juc-P7-445" userLabel="Spacer Text to Erase"/>
+                            <constraint firstItem="rFa-Uu-6MS" firstAttribute="top" secondItem="WbI-Bo-98q" secondAttribute="bottom" constant="16" id="MMk-YV-M12" userLabel="Spacer 4 to Text"/>
+                            <constraint firstItem="WbI-Bo-98q" firstAttribute="leading" secondItem="rFa-Uu-6MS" secondAttribute="leading" id="OUz-K4-PCL" userLabel="Text left"/>
+                            <constraint firstItem="4Wt-YY-bOf" firstAttribute="top" secondItem="Mcs-Qd-hPN" secondAttribute="bottom" constant="8" id="PeR-Cf-vvX" userLabel="Spacer 2 to 3">
+                                <variation key="heightClass=compact" constant="0.0"/>
+                            </constraint>
                             <constraint firstItem="6g4-T4-62L" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="QlY-sM-COY" userLabel="Box1 right"/>
                             <constraint firstItem="xIr-dE-8u2" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="XZs-fi-QHe" userLabel="Clear left"/>
                             <constraint firstItem="4Wt-YY-bOf" firstAttribute="trailing" secondItem="WbI-Bo-98q" secondAttribute="trailing" id="YUm-Ab-exp" userLabel="Box4 right"/>
                             <constraint firstItem="xIr-dE-8u2" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="20" id="YhX-71-ngR" userLabel="Clear top"/>
-                            <constraint firstItem="6g4-T4-62L" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="50" id="aPA-W8-AAM" userLabel="Box1 top"/>
+                            <constraint firstItem="6g4-T4-62L" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="50" id="aPA-W8-AAM" userLabel="Box1 top">
+                                <variation key="heightClass=compact" constant="25"/>
+                            </constraint>
                             <constraint firstItem="g1H-i0-mZS" firstAttribute="top" secondItem="xIr-dE-8u2" secondAttribute="top" id="cVE-aG-eou" userLabel="Undo top"/>
                             <constraint firstItem="g1H-i0-mZS" firstAttribute="leading" secondItem="xIr-dE-8u2" secondAttribute="trailing" constant="8" id="j9y-hT-DNQ" userLabel="Spacer Clear to Undo"/>
-                            <constraint firstItem="Mcs-Qd-hPN" firstAttribute="top" secondItem="6g4-T4-62L" secondAttribute="bottom" constant="8" id="jEU-zr-z4E" userLabel="Spacer 1 to 2"/>
+                            <constraint firstItem="Mcs-Qd-hPN" firstAttribute="top" secondItem="6g4-T4-62L" secondAttribute="bottom" constant="8" id="jEU-zr-z4E" userLabel="Spacer 1 to 2">
+                                <variation key="heightClass=compact" constant="0.0"/>
+                            </constraint>
                             <constraint firstItem="rEe-8l-9Qx" firstAttribute="leading" secondItem="WbI-Bo-98q" secondAttribute="leading" id="lC7-ju-sYj" userLabel="Erase left"/>
                             <constraint firstItem="1pZ-cH-gMe" firstAttribute="top" secondItem="xIr-dE-8u2" secondAttribute="top" id="oNc-Nq-bVU" userLabel="Smooth top"/>
                             <constraint firstItem="1pZ-cH-gMe" firstAttribute="leading" secondItem="g1H-i0-mZS" secondAttribute="trailing" constant="12" id="xzc-hp-ujb" userLabel="Spacer Undo to Smooth"/>
@@ -154,6 +180,7 @@
                         <outlet property="eraseButton" destination="rEe-8l-9Qx" id="BR3-dH-pgU"/>
                         <outlet property="smoothButton" destination="1pZ-cH-gMe" id="mgQ-i1-FTq"/>
                         <outlet property="swipeRecognizer" destination="h8m-cM-vmr" id="qsm-za-ksk"/>
+                        <outlet property="textModeButton" destination="rFa-Uu-6MS" id="nyl-a7-pY2"/>
                         <outlet property="undoButton" destination="g1H-i0-mZS" id="L4h-N0-tKN"/>
                     </connections>
                 </viewController>
@@ -164,7 +191,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-463" y="-485"/>
+            <point key="canvasLocation" x="-406" y="-452"/>
         </scene>
     </scenes>
 </document>
