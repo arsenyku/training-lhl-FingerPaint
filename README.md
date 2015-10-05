@@ -12,13 +12,10 @@ Demonstrate the ability to:
 
 Credits:
 
-UIBezierPath+Interpolation
+>UIBezierPath+Interpolation
+>CGPointExtension
 
-CGPointExtension
-
-Taken from project: https://github.com/jnfisher/ios-curve-interpolation
-
-Copyright (c) 2014 John Fisher. All rights reserved.
-
-License: MIT
+>Taken from project: https://github.com/jnfisher/ios-curve-interpolation
+>Copyright (c) 2014 John Fisher. All rights reserved.
+>License: MIT
 
