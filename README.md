@@ -4,7 +4,7 @@ Creates an iOS application that allows the user to draw on the screen using thei
 
 
 Learning goals: 
-Demonstrate the ability to:
+Demonstrate the ability to
 - use BezierPaths to dynamically draw on a UIView
 - use Autolayout with Size Classes to place controls on screen that dynamically adjust to device type and orientation
 - use Gesture Recognizers to respond to user touches
