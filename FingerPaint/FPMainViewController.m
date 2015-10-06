@@ -83,10 +83,12 @@ static int const EraserWidth = 30;
     // all 4 directions.  Two recognizers were required.
     //
     self.leftRightSwipeRecognizer.delaysTouchesBegan = YES;
+    self.leftRightSwipeRecognizer.delaysTouchesEnded = NO;
     self.leftRightSwipeRecognizer.numberOfTouchesRequired = 2;
     self.leftRightSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight ;
     
     self.upDownSwipeRecognizer.delaysTouchesBegan = YES;
+    self.upDownSwipeRecognizer.delaysTouchesEnded = NO;
     self.upDownSwipeRecognizer.numberOfTouchesRequired = 2;
     self.upDownSwipeRecognizer.direction = UISwipeGestureRecognizerDirectionUp | UISwipeGestureRecognizerDirectionDown ;
     [self.upDownSwipeRecognizer requireGestureRecognizerToFail:self.leftRightSwipeRecognizer];
@@ -103,6 +105,7 @@ static int const EraserWidth = 30;
 #pragma mark - touch events
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [super touchesBegan:touches withEvent:event];
     if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
     	NSLog(@"BEGAN:  << %lu >> %@", (unsigned long)[touches count], touches);
 
@@ -122,6 +125,7 @@ static int const EraserWidth = 30;
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    [super touchesMoved:touches withEvent:event];
     if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
 	    NSLog(@"MOVED: %@", touches);
     
@@ -131,6 +135,7 @@ static int const EraserWidth = 30;
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    [super touchesEnded:touches withEvent:event];
     if (DEBUGLEVEL == DBG_TOUCH_EVENTS || DEBUGLEVEL >= DBG_VERBOSE)
 	    NSLog(@"ENDED: << %lu >> %@", (unsigned long)[touches count], touches);
     
@@ -282,11 +287,14 @@ static int const EraserWidth = 30;
                              self.eraseButton, self.textModeButton,
                              self.clearButton, self.undoButton, self.smoothButton];
         
+        if (DEBUGLEVEL >= DBG_VERBOSE)
+            NSLog(@"%@ buttons", self.isDrawing ? @"Hiding" : @"Showing");
+        
         for (UIButton *button in buttons) {
             button.alpha = self.isDrawing ? 0.0 : 1.0;
         }
     }];
-    
+
     if (self.isErasing)
         self.eraseButton.backgroundColor = self.buttonHighlightColour;
     else
